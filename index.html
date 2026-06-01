@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0A0D12">
+<title>VisuFlow — Demo Stand</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --g:#2CB67D;--gd:#1A8C56;--b:#1A7FE8;
+  --bg:#0A0D12;--bg2:#0f1219;--bg3:#161b26;
+  --t:rgba(255,255,255,0.92);--t2:rgba(255,255,255,0.5);--t3:rgba(255,255,255,0.25);
+  --border:rgba(255,255,255,0.08);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{min-height:100vh;font-family:'Barlow',sans-serif;background:var(--bg);color:var(--t);overflow-x:hidden}
+
+/* BG GRID */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;
+  background-image:linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px);
+  background-size:48px 48px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 0%,transparent 100%);
+  pointer-events:none;
+}
+
+/* GLOW BLOBS */
+.blob1{position:fixed;top:-80px;right:-80px;width:320px;height:320px;border-radius:50%;background:rgba(26,127,232,0.1);filter:blur(60px);pointer-events:none;z-index:0}
+.blob2{position:fixed;bottom:-60px;left:-60px;width:280px;height:280px;border-radius:50%;background:rgba(44,182,125,0.08);filter:blur(50px);pointer-events:none;z-index:0}
+
+.page{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;gap:0}
+
+/* ── LOGO ── */
+.logo-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;margin-bottom:24px}
+.logo-img{width:72px;height:72px;object-fit:contain}
+.logo-name{font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase}
+.logo-name span{color:var(--g)}
+.logo-tag{font-size:11px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--t3)}
+
+/* ── HEADLINE ── */
+.headline{font-family:'Barlow Condensed',sans-serif;font-size:clamp(28px,8vw,52px);font-weight:800;text-transform:uppercase;line-height:0.95;letter-spacing:0.04em;text-align:center;margin-bottom:12px}
+.headline .hl-b{color:var(--b)}
+.headline .hl-g{color:var(--g)}
+
+.sub{font-size:14px;font-weight:300;color:var(--t2);text-align:center;line-height:1.6;max-width:280px;margin-bottom:32px}
+.sub strong{color:var(--t);font-weight:500}
+
+/* ── QR CARD ── */
+.qr-card{
+  background:var(--bg3);
+  border:1px solid rgba(44,182,125,0.3);
+  border-radius:20px;
+  padding:24px;
+  display:flex;flex-direction:column;align-items:center;gap:16px;
+  width:100%;max-width:320px;
+  margin-bottom:24px;
+  position:relative;
+}
+.qr-card::before{
+  content:'';position:absolute;inset:-1px;border-radius:20px;
+  background:linear-gradient(135deg,rgba(44,182,125,0.2),rgba(26,127,232,0.1),transparent);
+  z-index:-1;
+}
+
+.qr-label{
+  font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--g);display:flex;align-items:center;gap:6px;
+}
+.qr-label::before,.qr-label::after{content:'';flex:1;height:1px;background:rgba(44,182,125,0.2)}
+
+.qr-box{
+  width:180px;height:180px;
+  background:#fff;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  padding:10px;
+}
+.qr-box canvas{width:160px!important;height:160px!important}
+
+.qr-url{
+  font-family:monospace;font-size:12px;color:var(--t2);
+  background:rgba(255,255,255,0.05);
+  padding:6px 14px;border-radius:100px;
+  border:0.5px solid var(--border);
+  letter-spacing:0.04em;
+}
+
+.qr-hint{font-size:12px;color:var(--t3);text-align:center;line-height:1.5}
+
+/* ── FEATURES ── */
+.features{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:320px;margin-bottom:28px}
+.feat{
+  background:var(--bg3);border:0.5px solid var(--border);border-radius:12px;
+  padding:12px 10px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;
+}
+.feat-icon{font-size:22px}
+.feat-label{font-size:11px;font-weight:600;color:var(--t);letter-spacing:0.02em}
+.feat-sub{font-size:10px;color:var(--t3);line-height:1.4}
+
+/* ── CTA BUTTON ── */
+.cta{
+  width:100%;max-width:320px;
+  padding:15px;background:var(--g);color:#fff;
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:17px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;
+  border:none;border-radius:12px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  text-decoration:none;transition:background .2s,transform .15s;
+  margin-bottom:12px;
+}
+.cta:active{background:var(--gd);transform:scale(0.98)}
+.cta svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2}
+
+.cta2{
+  width:100%;max-width:320px;
+  padding:13px;background:transparent;color:var(--t2);
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:15px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;
+  border:0.5px solid var(--border);border-radius:12px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  text-decoration:none;transition:border-color .2s;
+}
+.cta2:active{border-color:rgba(255,255,255,0.3)}
+.cta2 svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8}
+
+/* ── PULSE BADGE ── */
+.live-badge{
+  display:inline-flex;align-items:center;gap:7px;
+  border:1px solid rgba(44,182,125,0.35);
+  padding:5px 14px;border-radius:100px;
+  font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--g);margin-bottom:20px;
+}
+.pulse{width:7px;height:7px;border-radius:50%;background:var(--g);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.75)}}
+
+/* ── FOOTER ── */
+.footer{
+  position:fixed;bottom:0;left:0;right:0;z-index:10;
+  padding:10px 20px 16px;
+  background:linear-gradient(transparent,var(--bg) 40%);
+  display:flex;justify-content:center;
+}
+.footer-inner{font-size:11px;color:var(--t3);text-align:center;letter-spacing:0.04em}
+
+/* ── INSTALL BANNER (appears after 3s) ── */
+.install-banner{
+  display:none;
+  position:fixed;bottom:60px;left:16px;right:16px;z-index:20;
+  background:var(--bg3);border:1px solid rgba(44,182,125,0.3);border-radius:14px;
+  padding:14px 16px;
+  flex-direction:column;gap:8px;
+}
+.install-banner.show{display:flex}
+.ib-row{display:flex;align-items:center;justify-content:space-between}
+.ib-title{font-size:13px;font-weight:600;color:var(--t)}
+.ib-sub{font-size:11px;color:var(--t2)}
+.ib-close{width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.ib-close svg{width:12px;height:12px;stroke:var(--t2);fill:none}
+.ib-steps{display:flex;gap:8px}
+.ib-step{flex:1;background:rgba(255,255,255,0.04);border-radius:8px;padding:8px 6px;text-align:center;font-size:10px;color:var(--t2);line-height:1.4}
+.ib-step strong{display:block;font-size:13px;margin-bottom:2px}
+</style>
+</head>
+<body>
+<div class="blob1"></div>
+<div class="blob2"></div>
+
+<div class="page">
+
+  <div class="logo-wrap">
+    <img class="logo-img" src="data:image/png;base64,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" alt="VisuFlow">
+    <div class="logo-name">VISU<span>FLOW</span></div>
+    <div class="logo-tag">Partenaire de Management Visuel</div>
+  </div>
+
+  <div class="live-badge"><div class="pulse"></div>Demo live — Testez maintenant</div>
+
+  <h1 class="headline">
+    <span class="hl-b">Terrain</span><br>
+    intelligent<br>
+    <span class="hl-g">en temps réel</span>
+  </h1>
+  <p class="sub">Scannez le QR code et testez l'app <strong>VisuFlow Terrain</strong> directement sur votre mobile — sans installation.</p>
+
+  <!-- QR CODE -->
+  <div class="qr-card">
+    <div class="qr-label">Scanner pour tester</div>
+    <div class="qr-box">
+      <canvas id="qr-canvas"></canvas>
+    </div>
+    <div class="qr-url" id="qr-url-display">visuflow-demo.netlify.app</div>
+    <div class="qr-hint">Ou tapez l'adresse dans votre navigateur</div>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="features">
+    <div class="feat">
+      <div class="feat-icon">📡</div>
+      <div class="feat-label">Scanner QR</div>
+      <div class="feat-sub">Identifiez chaque zone terrain</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">⚠️</div>
+      <div class="feat-label">Incident HSE</div>
+      <div class="feat-sub">Signalez en 30 secondes</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">✅</div>
+      <div class="feat-label">Checklist 5S</div>
+      <div class="feat-sub">Audit quotidien guidé</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">📊</div>
+      <div class="feat-label">KPIs Live</div>
+      <div class="feat-sub">TRS, sécurité, alertes</div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <a class="cta" href="visuflow-terrain-app.html" id="cta-btn">
+    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    Tester l'application
+  </a>
+  <a class="cta2" href="#" onclick="showInstall();return false">
+    <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+    Installer sur mon écran
+  </a>
+
+  <div style="height:60px"></div>
+</div>
+
+<div class="footer">
+  <div class="footer-inner">contact@visuflow.ma &nbsp;·&nbsp; visuflow.ma &nbsp;·&nbsp; Maroc · MENA</div>
+</div>
+
+<!-- INSTALL BANNER -->
+<div class="install-banner" id="install-banner">
+  <div class="ib-row">
+    <div>
+      <div class="ib-title">Installer VisuFlow</div>
+      <div class="ib-sub">Comme une vraie app, sans App Store</div>
+    </div>
+    <div class="ib-close" onclick="document.getElementById('install-banner').classList.remove('show')">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </div>
+  </div>
+  <div class="ib-steps" id="ib-steps">
+    <!-- filled by JS -->
+  </div>
+</div>
+
+<!-- QR CODE LIBRARY -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+(function(){
+  var url = window.location.origin + window.location.pathname.replace('index.html','') + 'visuflow-terrain-app.html';
+  if(window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'){
+    url = window.location.href.replace('index.html','visuflow-terrain-app.html');
+  }
+
+  // Update display
+  var disp = document.getElementById('qr-url-display');
+  try{ disp.textContent = new URL(url).host; } catch(e){}
+
+  // Update CTA
+  document.getElementById('cta-btn').href = 'visuflow-terrain-app.html';
+
+  // Generate QR
+  try{
+    new QRCode(document.getElementById('qr-canvas'),{
+      text: url,
+      width: 160, height: 160,
+      colorDark: '#0A0D12',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.H
+    });
+  } catch(e){ console.log('QR lib not loaded'); }
+
+  // Install steps
+  var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  var steps = isIOS
+    ? [['1','Ouvrez dans Safari'],['2','Appuyez sur ⬆️'],['3','"Sur l\'écran d\'accueil"']]
+    : [['1','Ouvrez dans Chrome'],['2','Menu ⋮ en haut'],['3','"Ajouter à l\'écran"']];
+  var s = document.getElementById('ib-steps');
+  steps.forEach(function(st){
+    var d = document.createElement('div');
+    d.className = 'ib-step';
+    d.innerHTML = '<strong>'+st[0]+'</strong>'+st[1];
+    s.appendChild(d);
+  });
+})();
+
+function showInstall(){
+  document.getElementById('install-banner').classList.add('show');
+}
+</script>
+</body>
+</html>
